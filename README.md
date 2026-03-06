@@ -1,6 +1,6 @@
 # Monarbor
 
-AI 友好的逻辑大仓命令行工具。一个 `monorepo.yaml` 配置文件描述所有仓库，一套命令统一管理。
+AI 友好的逻辑大仓命令行工具。一个 `mona.yaml` 配置文件描述所有仓库，一套命令统一管理。
 
 ## 安装
 
@@ -86,7 +86,7 @@ monarbor exec "pnpm build" --filter business-a
 
 ### 嵌套逻辑大仓
 
-当子目录下存在自己的 `monorepo.yaml` 时，带 `-r` 参数即可递归处理：
+当子目录下存在自己的 `mona.yaml` 时，带 `-r` 参数即可递归处理：
 
 ```bash
 monarbor clone -r      # 递归 clone
@@ -94,7 +94,7 @@ monarbor status -r     # 递归查看状态
 monarbor list -r       # 递归列出树形结构
 ```
 
-## monorepo.yaml 格式
+## mona.yaml 格式
 
 ```yaml
 name: "我的大仓"

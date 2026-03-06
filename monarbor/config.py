@@ -1,4 +1,4 @@
-"""monorepo.yaml 配置的加载与解析。"""
+"""mona.yaml 配置的加载与解析。"""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from typing import Iterator
 
 import yaml
 
-CONFIG_FILENAME = "monorepo.yaml"
+CONFIG_FILENAME = "mona.yaml"
 
 
 @dataclass

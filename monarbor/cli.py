@@ -26,7 +26,7 @@ console = Console()
 
 
 def find_root(start: Path | None = None) -> Path:
-    """向上查找最近的 monorepo.yaml 所在目录。"""
+    """向上查找最近的 mona.yaml 所在目录。"""
     current = (start or Path.cwd()).resolve()
     while True:
         if (current / CONFIG_FILENAME).exists():
