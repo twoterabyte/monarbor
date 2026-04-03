@@ -103,7 +103,7 @@ def clone_repos(recursive: bool, branch_type: str, path_filter: str | None):
                 result = clone(repo.repo_url, target, branch=branch)
             if result.ok:
                 success += 1
-                _ensure_in_gitignore(target, ".worktrees/")
+                _ensure_in_git_exclude(target, ".worktrees/")
                 console.print(f"       [green]✓[/green]")
                 # 若该仓库本身也是嵌套大仓，递归 clone 其子仓库
                 if recursive and (target / CONFIG_FILENAME).exists():
@@ -161,7 +161,7 @@ def pull_repos(recursive: bool, clone_missing: bool, branch_type: str):
                         result = clone(repo.repo_url, target, branch=branch)
                     if result.ok:
                         success += 1
-                        _ensure_in_gitignore(target, ".worktrees/")
+                        _ensure_in_git_exclude(target, ".worktrees/")
                         console.print(f"       [green]✓[/green]")
                     else:
                         console.print(f"       [red]✗ {result.error}[/red]")
@@ -383,6 +383,24 @@ def _ensure_in_gitignore(root: Path, entry: str) -> None:
         gitignore_path.write_text(content, encoding="utf-8")
     else:
         gitignore_path.write_text(f"{entry}\n", encoding="utf-8")
+
+
+def _ensure_in_git_exclude(repo_path: Path, entry: str) -> None:
+    """确保指定条目在 .git/info/exclude 中（本地排除，不影响工作区，不产生 unstaged changes）。"""
+    exclude_path = repo_path / ".git" / "info" / "exclude"
+    if not exclude_path.parent.exists():
+        exclude_path.parent.mkdir(parents=True, exist_ok=True)
+    if exclude_path.exists():
+        content = exclude_path.read_text(encoding="utf-8")
+        for line in content.splitlines():
+            if line.strip() == entry:
+                return
+        if not content.endswith("\n"):
+            content += "\n"
+        content += f"{entry}\n"
+        exclude_path.write_text(content, encoding="utf-8")
+    else:
+        exclude_path.write_text(f"{entry}\n", encoding="utf-8")
 
 
 def _ensure_gitignore(root: Path) -> None:
