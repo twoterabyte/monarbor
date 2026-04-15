@@ -94,8 +94,11 @@ def clone_repos(recursive: bool, branch_type: str, path_filter: str | None):
                 total -= 1
                 # 已存在的 repo 如果自身含嵌套大仓，仍需递归处理
                 if recursive and (target / CONFIG_FILENAME).exists():
-                    for nested_config in walk_monorepos(target, recursive=True):
-                        _clone_config(nested_config)
+                    try:
+                        for nested_config in walk_monorepos(target, recursive=True):
+                            _clone_config(nested_config)
+                    except Exception as e:
+                        console.print(f"       [yellow]⚠ 无法加载嵌套大仓 {repo.path}: {e}[/yellow]")
                 continue
 
             branch = repo.branches.get(branch_type)

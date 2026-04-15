@@ -8,7 +8,6 @@
 
 from __future__ import annotations
 
-import os
 import subprocess
 from pathlib import Path
 
@@ -45,7 +44,7 @@ def _make_bare_repo(path: Path, files: dict[str, str] | None = None) -> str:
     return str(bare), branch
 
 
-def test_clone_r_recurses_into_already_cloned_repo(tmp_path: Path):
+def test_clone_r_recurses_into_already_cloned_repo(tmp_path: Path, monkeypatch):
     """clone -r 应对已 clone 的嵌套大仓递归处理其内部子仓库。
 
     对应场景 2：clone -r（已 clone）跳过后不递归。"""
@@ -75,7 +74,7 @@ def test_clone_r_recurses_into_already_cloned_repo(tmp_path: Path):
     (root / "mona.yaml").write_text(yaml.dump(root_mona, allow_unicode=True))
 
     runner = CliRunner()
-    os.chdir(root)
+    monkeypatch.chdir(root)
 
     # 第一次 clone：拉下 platform
     result = runner.invoke(main, ["clone"])
